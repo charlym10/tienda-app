@@ -1,5 +1,14 @@
 <template>
-    <div id="Products">
+    <div id="Products" class="vld-parent">
+        <loading
+        :active.sync="isLoading"
+        :can-cancel="false" 
+        :on-cancel="onCancel"
+        :is-full-page="fullPage"
+        loader="dots"
+        color="#17a2b8"
+        height=128
+        width=128></loading>
         <b-container class="bv-example-row">
             <b-row class="text-center">
                 <b-col></b-col>
@@ -26,15 +35,23 @@
 <script>
     import axios from 'axios';
     import Product from './Product.vue';
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+    
     export default {
         name: "Products",
 
-        components: {Product},
+        components: {
+            Product,
+            Loading,
+        },
 
         data:function(){
             return {
                 productos: [],
-                idSelect: ''
+                idSelect: '',
+                isLoading: false,
+                fullPage: true
             }
         },
 
@@ -42,12 +59,16 @@
 
             let self = this
 
+            this.isLoading = true;
+
             axios.get("https://tienda-virtual-api.herokuapp.com/api/v1/productos/")
                 .then((result) => {
-                    self.productos = result.data
+                    this.isLoading = false;
+                    self.productos = result.data;
                 })
                 .catch((error) => {
-                  alert(error);
+                    this.isLoading = false;
+                    alert(error);
                 });
         }
     }
