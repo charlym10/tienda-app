@@ -2,13 +2,13 @@
     <div id="Products" class="vld-parent">
         <loading
         :active.sync="isLoading"
-        :can-cancel="false" 
-        :on-cancel="onCancel"
+        :can-cancel="false"
         :is-full-page="fullPage"
         loader="dots"
         color="#17a2b8"
-        height=128
-        width=128></loading>
+        :height="128"
+        :width="128"
+        ></loading>
         <b-container class="bv-example-row">
             <b-row class="text-center">
                 <b-col></b-col>
@@ -16,13 +16,16 @@
                     <b-card-group columns>
                         <product
                             v-for="producto in productos"
-                            v-bind:key="producto.Nombre"
-                            v-bind:Nombre="producto.Nombre"
-                            v-bind:Categoria="producto.Categoría"
-                            v-bind:Precio="producto.Precio"
-                            v-bind:Unidad="producto.Unidad"
-                            v-bind:Proveedor="producto.Proveedor"
-                            v-bind:Disponibilidad="producto.Disponibilidad"
+                            v-bind:key="producto.id"
+                            v-bind:id="producto.id"
+                            v-bind:nombre="producto.nombre"
+                            v-bind:categoria="producto.categoria"
+                            v-bind:precio="producto.precio"
+                            v-bind:unidad="producto.unidad"
+                            v-bind:proveedor="producto.proveedor"
+                            v-bind:disponibilidad="producto.disponibilidad"
+                            v-bind:url="producto.url"
+                            v-bind:getProducts="getProducts"
                         ></product>
                     </b-card-group>
                 </b-col>
@@ -46,7 +49,7 @@
             Loading,
         },
 
-        data:function(){
+        data: function(){
             return {
                 productos: [],
                 idSelect: '',
@@ -55,21 +58,27 @@
             }
         },
 
+        methods: {
+            getProducts: function() {
+
+                let self = this
+
+                this.isLoading = true;
+
+                axios.get("https://tienda-virtual-api.herokuapp.com/api/v1/products")
+                    .then((result) => {
+                        this.isLoading = false;
+                        self.productos = result.data;
+                    })
+                    .catch((error) => {
+                        this.isLoading = false;
+                        alert(error);
+                    });
+            }
+        },
+
         created: function() {
-
-            let self = this
-
-            this.isLoading = true;
-
-            axios.get("https://tienda-virtual-api.herokuapp.com/api/v1/productos/")
-                .then((result) => {
-                    this.isLoading = false;
-                    self.productos = result.data;
-                })
-                .catch((error) => {
-                    this.isLoading = false;
-                    alert(error);
-                });
+            this.getProducts()            
         }
     }
 </script>

@@ -1,16 +1,16 @@
 <template>
     <div id="EditProduct">
-        <b-modal @ok="handleOk" v-bind:id="Nombre" size="lg" title="Editar producto">
+        <b-modal @ok="handleOk" v-bind:id="nombre" size="lg" title="Editar producto">
             <form ref="form" @submit.stop.prevent="handleSubmit">
 
                 <b-form-group
                 label="Nombre:"
-                label-for="Nombre-input"
+                label-for="nombre-input"
                 invalid-feedback="El nombre es requerido">
                     <b-form-input
                         id="name-input"
                         :disabled=true
-                        v-model="Nombre"
+                        v-model="nombre"
                         placeholder="Ingrese el nombre del producto"
                         required>
                     </b-form-input>
@@ -23,19 +23,19 @@
                     <b-form-select
                     id="Categoria-input"
                     class="mb-2 mr-sm-2 mb-sm-0"
-                    :options="[{ text: 'Seleccione la categoría', value: null }, 'Accesorios', 'Cámaras', 'Mesas oficina', 'Neveras', 'Sillas oficina']"
-                    v-model="Categoria"
+                    :options="[{ text: 'Seleccione la categoría', value: null }, 'Accesorios', 'Cámaras', 'Mesas oficina', 'Neveras', 'Sillas oficina', 'Celulares', 'Computadores']"
+                    v-model="categoria"
                     required>
                     </b-form-select>
                 </b-form-group>
 
                 <b-form-group
                 label="Precio:"
-                label-for="Precio-input"
+                label-for="precio-input"
                 invalid-feedback="El precio es requerido">
                     <b-form-input
                         id="Precio-input"
-                        v-model="Precio"
+                        v-model="precio"
                         type="number"
                         placeholder="Ingrese el Precio del producto"
                         required>
@@ -48,7 +48,7 @@
                 invalid-feedback="La unidad es requerida">
                     <b-form-input
                         id="name-input"
-                        v-model="Unidad"
+                        v-model="unidad"
                         placeholder="Ingrese la unidad del producto"
                         required>
                     </b-form-input>
@@ -56,24 +56,24 @@
 
                 <b-form-group
                 label="Proveedor:"
-                label-for="Proveedor-input"
+                label-for="proveedor-input"
                 invalid-feedback="El proveedor es requerido">
                     <b-form-select
-                    id="Proveedor-input"
+                    id="proveedor-input"
                     class="mb-2 mr-sm-2 mb-sm-0"
                     :options="[{ text: 'Seleccione el proveedor', value: null }, 'COLOMBIANA DE COMERCIO S.A Y/O ALKOSTO S.A', 'MAKRO SUPERMAYORISTA S.A.S']"
-                    v-model="Proveedor"
+                    v-model="proveedor"
                     required>
                     </b-form-select>
                 </b-form-group>
 
                 <b-form-group
                 label="Disponibilidad:"
-                label-for="Disponibilidad-input"
+                label-for="disponibilidad-input"
                 invalid-feedback="La disponibilidad es requerida">
                     <b-form-input
-                        id="Disponibilidad-input"
-                        v-model="Disponibilidad"
+                        id="disponibilidad-input"
+                        v-model="disponibilidad"
                         type="number"
                         placeholder="Ingrese la disponibilidad del producto"
                         required>
@@ -91,12 +91,15 @@ export default {
     name: "EditProduct",
 
     props: {
-        Nombre: String,
-        Categoria: String,
-        Precio: Number,
-        Unidad: String,
-        Proveedor: String,
-        Disponibilidad: Number,
+        id: Number,
+        nombre: String,
+        categoria: String,
+        precio: Number,
+        unidad: String,
+        proveedor: String,
+        disponibilidad: Number,
+        url: String,
+        getProducts: Function,
     },
 
     methods: {
@@ -108,18 +111,20 @@ export default {
             let self = this
 
             var datos = {
-                Nombre: self.Nombre,
-                Categoría: self.Categoria,
-                Precio: self.Precio,
-                Unidad: self.Unidad,
-                Proveedor: self.Proveedor,
-                Disponibilidad: self.Disponibilidad
+                id: self.id,
+                nombre: self.nombre,
+                categoria: self.categoria,
+                precio: self.precio,
+                unidad: self.unidad,
+                proveedor: self.proveedor,
+                disponibilidad: self.disponibilidad,
+                url: self.url,
             }
 
-            axios.put("https://tienda-virtual-api.herokuapp.com/api/v1/producto/actualizacion", datos)
+            axios.put("https://tienda-virtual-api.herokuapp.com/api/v1/product", datos)
                 .then((result) => {
                     // alert("Se modificó el producto satisfactoriamente.");
-                    window.location.href = 'products';
+                    this.getProducts();
                 })
                 .catch((error) => {
                   alert(error);
