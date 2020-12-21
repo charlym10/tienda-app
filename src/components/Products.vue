@@ -69,6 +69,7 @@
                     .then((result) => {
                         this.isLoading = false;
                         self.productos = result.data;
+                        self.$emit('showMsgBox');
                     })
                     .catch((error) => {
                         this.isLoading = false;

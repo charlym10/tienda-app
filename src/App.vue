@@ -43,7 +43,7 @@
     </div>
     
     <div class="main-component" style="margin-top: 60px">
-      <router-view v-on:log-in="logIn"></router-view>
+      <router-view v-on:log-in="logIn" v-on:showMsgBox="showMsgBox"></router-view>
     </div>
 
   </div>
@@ -59,6 +59,7 @@
       return {
         is_auth: localStorage.getItem('isAuth') || false,
         boxTwo: '',
+        showMsg: true,
       }
     },
 
@@ -103,6 +104,11 @@
           buttonSize: 'sm',
           centered: true, size: 'sm'
         })
+      },
+      showMsgBox: function () {
+        if (this.showMsg) {
+          this.showMsgBoxTwo()
+        }
       }
     },
 
@@ -113,8 +119,8 @@
       }
     },
 
-    created: function(){
-      this.showMsgBoxTwo()
+    updated: function(){
+      this.showMsg = false
     }
   }
 </script>
