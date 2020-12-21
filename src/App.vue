@@ -99,9 +99,7 @@
           ]),
         ])
         this.$bvModal.msgBoxOk([messageVNode], {
-          title: 'Credenciales de prueba',
-          headerClass: 'p-2 border-bottom-0',
-          footerClass: 'p-2 border-top-0',
+          title: 'Credenciales',
           buttonSize: 'sm',
           centered: true, size: 'sm'
         })
